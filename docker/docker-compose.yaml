@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+    db:
+        image: postgres:13.4
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          ENCODING: UTF-8
+          POSTGRES_BD: ragnarok_dev
+          PGDATA: /var/lib/postgresql/data/pgdata
+        volumes:
+          - pgdata:/var/lib/postgresql/data/pgdata
+        ports:
+          - 8080:5432
+
+volumes:
+  pgdata:
