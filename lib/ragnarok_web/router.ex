@@ -17,7 +17,8 @@ defmodule RagnarokWeb.Router do
   scope "/api", RagnarokWeb do
     pipe_through :browser
 
-    get "/classes", PageController, :list_classes
+    get "/classes", PageController, :get_classes
+    get "/classes/:name", PageController, :get_by_class_name
   end
 
   # Other scopes may use custom stacks.
