@@ -16,7 +16,7 @@ config :ragnarok, RagnarokWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Phoenix.Endpoint.Cowboy2Adapter,
   render_errors: [
-    formats: [html: RagnarokWeb.ErrorHTML, json: RagnarokWeb.ErrorJSON],
+    formats: [json: RagnarokWeb.ErrorJSON],
     layout: false
   ],
   pubsub_server: Ragnarok.PubSub,

@@ -2,10 +2,8 @@ defmodule RagnarokWeb.Router do
   use RagnarokWeb, :router
 
   pipeline :browser do
-    plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
-    plug :put_root_layout, html: {RagnarokWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
@@ -15,10 +13,11 @@ defmodule RagnarokWeb.Router do
   end
 
   scope "/api", RagnarokWeb do
-    pipe_through :browser
+    pipe_through :api
 
     get "/classes", PageController, :get_classes
     get "/classes/:name", PageController, :get_by_class_name
+    post "/classes", PageController, :create_class
   end
 
   # Other scopes may use custom stacks.

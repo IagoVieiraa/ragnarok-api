@@ -26,7 +26,7 @@ defmodule RagnarokWeb.PageController do
     end
   end
 
-  defp create_classes() do
+  def create_classes() do
     [
       %Class{
         name: "Warrior",
