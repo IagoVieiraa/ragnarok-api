@@ -4,6 +4,8 @@ defmodule PageControllerTest do
 
   test "GET /api/classes returns 200", %{conn: conn} do
     conn = get(conn, "/api/classes")
+    IO.inspect(conn)
+
     assert conn.status == 200
   end
 

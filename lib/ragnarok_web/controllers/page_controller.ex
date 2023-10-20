@@ -2,7 +2,8 @@ defmodule RagnarokWeb.PageController do
   use RagnarokWeb, :controller
 
   def get_classes(conn, _params) do
-    classes = create_classes()
+    classes = gen_classes()
+    IO.inspect(conn)
 
     conn
     |> put_resp_content_type("application/json")
@@ -10,7 +11,7 @@ defmodule RagnarokWeb.PageController do
   end
 
   def get_by_class_name(conn, %{"name" => name}) do
-    classes = create_classes()
+    classes = gen_classes()
 
     case Enum.find(classes, fn c -> c.name == name end) do
       nil ->
@@ -26,7 +27,10 @@ defmodule RagnarokWeb.PageController do
     end
   end
 
-  def create_classes() do
+  def create_class() do
+  end
+
+  def gen_classes() do
     [
       %Class{
         name: "Warrior",
