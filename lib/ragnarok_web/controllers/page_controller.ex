@@ -27,29 +27,32 @@ defmodule RagnarokWeb.PageController do
     end
   end
 
-  def create_class() do
+  def create_class(conn, %{"name" => name, "description" => description}) do
+    class = %Class{name: name, description: description}
+    classes = gen_classes() ++ [class]
+
+    :ok = Application.put_env(:ragnarok_web, :classes, classes)
+
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(201, Poison.encode!(%{class: class}))
+
+    # Atualiza a lista de classes com a nova classe adicionada
+
   end
 
-  def gen_classes() do
-    [
-      %Class{
-        name: "Warrior",
-        description: "A strong and brave fighter",
-        stats: %{attack: 10, defense: 8},
-        skills: ["Sword Mastery", "Shield Bash"]
-      },
-      %Class{
-        name: "Mage",
-        description: "A wise and powerful spellcaster",
-        stats: %{attack: 8, defense: 6, magic: 12},
-        skills: ["Fireball", "Ice Storm", "Heal"]
-      },
-      %Class{
-        name: "Rogue",
-        description: "A sneaky and agile thief",
-        stats: %{attack: 9, defense: 7, agility: 12},
-        skills: ["Backstab", "Pickpocket", "Stealth"]
-      }
-    ]
+  defp gen_classes(classes \\ []) do
+    case classes do
+      [] ->
+        classes = [
+          %Class{name: "Espadachim", description: "Classe de combate corpo a corpo"},
+          %Class{name: "Mago", description: "Classe de suporte mágico"},
+          %Class{name: "Arqueiro", description: "Classe de combate à distância"},
+          %Class{name: "Noviço", description: "Classe de suporte divino"}
+        ]
+        Enum.reverse(classes)
+      _ ->
+        classes
+    end
   end
 end
