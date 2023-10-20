@@ -1,3 +1,3 @@
 defmodule Class do
-  defstruct name: nil, description: nil, stats: nil, skills: nil
+  defstruct id: nil, name: nil, description: nil, stats: nil, skills: nil
 end

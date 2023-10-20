@@ -16,8 +16,10 @@ defmodule RagnarokWeb.Router do
     pipe_through :api
 
     get "/classes", PageController, :get_classes
-    get "/classes/:name", PageController, :get_by_class_name
+    get "/classes/:name", PageController, :get_class_by_name
+    get "/classes/:id", PageController, :get_class_by_id
     post "/classes", PageController, :create_class
+    put "/classes/:id", PageController, :update_class
   end
 
   # Other scopes may use custom stacks.
