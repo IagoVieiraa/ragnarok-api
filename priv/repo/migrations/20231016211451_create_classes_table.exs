@@ -9,6 +9,8 @@ defmodule Ragnarok.Repo.Migrations.CreateClassesTable do
       add :skills, {:array, :string}
 
       timestamps()
+    end
+
+    create unique_index(:classes, [:name])
   end
-end
 end

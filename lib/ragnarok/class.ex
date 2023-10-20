@@ -1,5 +1,6 @@
 defmodule Ragnarok.Class do
   use Ecto.Schema
+  import Ecto.Changeset
 
   schema "classes" do
     field :name, :string
@@ -8,5 +9,11 @@ defmodule Ragnarok.Class do
     field :skills, {:array, :string}
 
     timestamps()
+  end
+
+  def changeset(class, attrs) do
+    class
+    |> cast(attrs, [:name, :description, :stats, :skills])
+    |> validate_required([:name, :description, :stats, :skills])
   end
 end
