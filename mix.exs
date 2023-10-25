@@ -50,7 +50,10 @@ defmodule Ragnarok.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:plug_cowboy, "~> 2.5"},
-      {:poison, "~> 5.0"}
+      {:poison, "~> 5.0"},
+      {:tesla, "~> 1.7.0"},
+      {:mox, "~> 0.5.2", only: :test},
+      {:ecto_factory, "~> 0.3.1"}
     ]
   end
 

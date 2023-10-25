@@ -9,7 +9,7 @@ config :ragnarok, Ragnarok.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
-  database: "ragnarok_test#{System.get_env("MIX_TEST_PARTITION")}",
+  database: "ragnarok_test",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
@@ -31,3 +31,5 @@ config :logger, level: :warning
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :tesla, adapter: Tesla.Mock

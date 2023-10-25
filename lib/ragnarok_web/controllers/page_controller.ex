@@ -7,9 +7,18 @@ defmodule RagnarokWeb.PageController do
   def get_classes(conn, _params) do
     classes = gen_classes()
 
-    conn
-    |> put_resp_content_type("application/json")
-    |> send_resp(200, Poison.encode!(%{classes: classes}))
+    case classes do
+      [] ->
+        conn
+        |> put_status(404)
+        |> put_resp_content_type("application/json")
+        |> send_resp(404, Poison.encode!(%{error: "Classes empty"}))
+
+      _ ->
+        conn
+        |> put_resp_content_type("application/json")
+        |> send_resp(200, Poison.encode!(%{classes: classes}))
+    end
   end
 
   def get_class_by_name(conn, %{"name" => name}) do
@@ -47,35 +56,45 @@ defmodule RagnarokWeb.PageController do
   end
 
   def update_class(conn, %{"id" => id} = params) do
-      class = Repo.get(Class, id)
+    class = Repo.get(Class, id)
 
-      case class do
-        nil ->
-          conn
-          |> put_status(404)
-          |> put_resp_content_type("application/json")
-          |> send_resp(404, Poison.encode!(%{error: "Class not found"}))
+    case class do
+      nil ->
+        conn
+        |> put_status(404)
+        |> put_resp_content_type("application/json")
+        |> send_resp(404, Poison.encode!(%{error: "Class not found"}))
 
-        _ ->
-          changeset = Class.changeset(class, params)
+      _ ->
+        changeset = Class.changeset(class, params)
 
-          case Repo.update(changeset) do
-             {:ok, class} ->
-               conn
-               |> put_resp_content_type("application/json")
-               |> send_resp(200, Poison.encode!(%{class: class}))
+        case Repo.update(changeset) do
+          {:ok, class} ->
+            conn
+            |> put_resp_content_type("application/json")
+            |> send_resp(200, Poison.encode!(%{class: class}))
 
-              {:error, error} ->
-                conn
-                |> put_status(422)
-                |> put_resp_content_type("application/json")
-                |> send_resp(422, Poison.encode!(%{errors: error}))
-          end
-      end
+          {:error, error} ->
+            conn
+            |> put_status(422)
+            |> put_resp_content_type("application/json")
+            |> send_resp(422, Poison.encode!(%{errors: error}))
+        end
+    end
   end
 
-  def create_class(conn, %{"name" => name, "description" => description, "stats" => stats, "skills" => skills} = params) do
-    changeset = Class.changeset(%Class{}, %{name: name, description: description, stats: stats, skills: skills})
+  def create_class(
+        conn,
+        %{"name" => name, "description" => description, "stats" => stats, "skills" => skills} =
+          _params
+      ) do
+    changeset =
+      Class.changeset(%Class{}, %{
+        name: name,
+        description: description,
+        stats: stats,
+        skills: skills
+      })
 
     case Repo.insert(changeset) do
       {:ok, class} ->
@@ -91,6 +110,25 @@ defmodule RagnarokWeb.PageController do
         |> put_status(422)
         |> put_resp_content_type("application/json")
         |> send_resp(422, Poison.encode!(%{errors: changeset}))
+    end
+  end
+
+  def delete_class(conn, %{"id" => id}) do
+    class = Repo.get(Class, id)
+
+    case class do
+      nil ->
+        conn
+        |> put_status(404)
+        |> put_resp_content_type("application/json")
+        |> send_resp(404, Poison.encode!(%{error: "Class not found"}))
+
+      _ ->
+        Repo.delete(class)
+
+        conn
+        |> put_resp_content_type("application/json")
+        |> send_resp(200, Poison.encode!(%{message: "Class deleted successfully"}))
     end
   end
 
