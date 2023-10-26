@@ -53,7 +53,8 @@ defmodule Ragnarok.MixProject do
       {:poison, "~> 5.0"},
       {:tesla, "~> 1.7.0"},
       {:mox, "~> 0.5.2", only: :test},
-      {:ecto_factory, "~> 0.3.1"}
+      {:ecto_factory, "~> 0.3.1"},
+      {:excoveralls, "~> 0.18.0"}
     ]
   end
 
