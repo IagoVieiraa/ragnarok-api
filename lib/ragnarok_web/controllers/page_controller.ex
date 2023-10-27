@@ -88,28 +88,40 @@ defmodule RagnarokWeb.PageController do
         %{"name" => name, "description" => description, "stats" => stats, "skills" => skills} =
           _params
       ) do
-    changeset =
-      Class.changeset(%Class{}, %{
-        name: name,
-        description: description,
-        stats: stats,
-        skills: skills
-      })
+    case Repo.get_by(Class, name: name) do
+      nil ->
+        changeset =
+          Class.changeset(%Class{}, %{
+            name: name,
+            description: description,
+            stats: stats,
+            skills: skills
+          })
 
-    case Repo.insert(changeset) do
-      {:ok, class} ->
-        classes = gen_classes()
+        case Repo.insert(changeset) do
+          {:ok, class} ->
+            classes = gen_classes()
 
-        conn
-        |> put_status(201)
-        |> put_resp_content_type("application/json")
-        |> send_resp(201, Poison.encode!(%{class: class, classes: classes}))
+            conn
+            |> put_status(201)
+            |> put_resp_content_type("application/json")
+            |> send_resp(201, Poison.encode!(%{class: class, classes: classes}))
 
-      {:error, changeset} ->
+          {:error, changeset} ->
+            conn
+            |> put_status(422)
+            |> put_resp_content_type("application/json")
+            |> send_resp(422, Poison.encode!(%{errors: changeset}))
+        end
+
+      _ ->
         conn
         |> put_status(422)
         |> put_resp_content_type("application/json")
-        |> send_resp(422, Poison.encode!(%{errors: changeset}))
+        |> send_resp(
+          422,
+          Poison.encode!(%{errors: %{name: "Class with name #{name} already exists"}})
+        )
     end
   end
 
