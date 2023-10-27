@@ -1,10 +1,11 @@
-defmodule RagnarokWeb.PageController do
+defmodule RagnarokWeb.ClassController do
   use RagnarokWeb, :controller
-
   alias Ragnarok.Repo
   alias Ragnarok.Class
+  alias RagnarokWeb.ClassView
 
-  def get_classes(conn, _params) do
+  def get_classes(conn, params) do
+    IO.inspect(params)
     classes = gen_classes()
 
     case classes do

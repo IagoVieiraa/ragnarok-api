@@ -1,10 +1,10 @@
-defmodule PageControllerTest do
+defmodule ClassControllerTest do
   use RagnarokWeb.ConnCase
 
   alias Ragnarok.Class
   alias Ragnarok.Repo
 
-  @endpoint RagnarokWeb.PageController
+  @endpoint RagnarokWeb.ClassController
 
   test "get_classes returns 200" do
     # Cria uma instância do modelo Class
