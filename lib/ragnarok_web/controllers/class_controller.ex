@@ -105,7 +105,7 @@ defmodule RagnarokWeb.ClassController do
 
         case Repo.insert(changeset) do
           {:ok, class} ->
-            classes = gen_classes()
+            _classes = gen_classes()
 
             conn
             |> put_status(201)

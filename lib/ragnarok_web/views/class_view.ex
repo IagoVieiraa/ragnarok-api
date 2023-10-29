@@ -1,6 +1,4 @@
 defmodule RagnarokWeb.ClassView do
-  import Phoenix.LiveView
-
   def render("list.json", %{classes: classes}) do
     classes_with_id =
       Enum.map(classes, fn class ->
@@ -46,7 +44,7 @@ defmodule RagnarokWeb.ClassView do
     }
   end
 
-  def render("delete.json", %{info: info}) do
+  def render("delete.json", %{info: _info}) do
     %{
       info: "Class deleted successfully"
     }
