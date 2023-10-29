@@ -2,6 +2,7 @@ defmodule Ragnarok.Class do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder, only: [:name, :description, :stats, :skills]}
   schema "classes" do
     field :name, :string
     field :description, :string

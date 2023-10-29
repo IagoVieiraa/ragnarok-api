@@ -17,8 +17,9 @@ defmodule RagnarokWeb.ClassController do
 
       _ ->
         conn
-        |> put_resp_content_type("application/json")
-        |> send_resp(200, Poison.encode!(%{classes: classes}))
+        |> put_status(200)
+        |> put_view(ClassView)
+        |> render("list.json", classes: classes)
     end
   end
 
@@ -34,8 +35,9 @@ defmodule RagnarokWeb.ClassController do
 
       class ->
         conn
-        |> put_resp_content_type("application/json")
-        |> send_resp(200, Poison.encode!(%{class: class}))
+        |> put_status(200)
+        |> put_view(ClassView)
+        |> render("list.json", class: class)
     end
   end
 
@@ -51,8 +53,9 @@ defmodule RagnarokWeb.ClassController do
 
       _ ->
         conn
-        |> put_resp_content_type("application/json")
-        |> send_resp(200, Poison.encode!(%{class: class}))
+        |> put_status(200)
+        |> put_view(ClassView)
+        |> render("list.json", class: class)
     end
   end
 
@@ -72,8 +75,9 @@ defmodule RagnarokWeb.ClassController do
         case Repo.update(changeset) do
           {:ok, class} ->
             conn
-            |> put_resp_content_type("application/json")
-            |> send_resp(200, Poison.encode!(%{class: class}))
+            |> put_status(200)
+            |> put_view(ClassView)
+            |> render("updated.json", class: class)
 
           {:error, error} ->
             conn
@@ -105,8 +109,8 @@ defmodule RagnarokWeb.ClassController do
 
             conn
             |> put_status(201)
-            |> put_resp_content_type("application/json")
-            |> send_resp(201, Poison.encode!(%{class: class, classes: classes}))
+            |> put_view(ClassView)
+            |> render("create.json", class: class)
 
           {:error, changeset} ->
             conn
@@ -140,8 +144,9 @@ defmodule RagnarokWeb.ClassController do
         Repo.delete(class)
 
         conn
-        |> put_resp_content_type("application/json")
-        |> send_resp(200, Poison.encode!(%{message: "Class deleted successfully"}))
+        |> put_status(200)
+        |> put_view(ClassView)
+        |> render("delete.json", info: "Class deleted successfully")
     end
   end
 
