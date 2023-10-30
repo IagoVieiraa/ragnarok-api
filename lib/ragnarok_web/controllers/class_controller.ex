@@ -3,19 +3,18 @@ defmodule RagnarokWeb.ClassController do
   alias Ragnarok.Repo
   alias Ragnarok.Class
   alias RagnarokWeb.ClassView
+  alias RagnarokWeb.ClassServer
 
   def get_classes(conn, params) do
-    IO.inspect(params)
-    classes = gen_classes()
 
-    case classes do
+    case ClassServer.get_classes do
       [] ->
         conn
         |> put_status(404)
         |> put_resp_content_type("application/json")
         |> send_resp(404, Poison.encode!(%{error: "Classes empty"}))
 
-      _ ->
+      classes ->
         conn
         |> put_status(200)
         |> put_view(ClassView)
@@ -88,47 +87,25 @@ defmodule RagnarokWeb.ClassController do
     end
   end
 
-  def create_class(
-        conn,
-        %{"name" => name, "description" => description, "stats" => stats, "skills" => skills} =
-          _params
-      ) do
-    case Repo.get_by(Class, name: name) do
-      nil ->
-        changeset =
-          Class.changeset(%Class{}, %{
-            name: name,
-            description: description,
-            stats: stats,
-            skills: skills
-          })
+    def create_class(
+      conn,
+      %{"name" => name, "description" => description, "stats" => stats, "skills" => skills} =
+        params
+    ) do
+  case GenServer.call(ClassServer, {:create_class, params}) do
+    {:ok, class} ->
+      conn
+      |> put_status(201)
+      |> put_view(ClassView)
+      |> render("create.json", class: class)
 
-        case Repo.insert(changeset) do
-          {:ok, class} ->
-            _classes = gen_classes()
-
-            conn
-            |> put_status(201)
-            |> put_view(ClassView)
-            |> render("create.json", class: class)
-
-          {:error, changeset} ->
-            conn
-            |> put_status(422)
-            |> put_resp_content_type("application/json")
-            |> send_resp(422, Poison.encode!(%{errors: changeset}))
-        end
-
-      _ ->
-        conn
-        |> put_status(422)
-        |> put_resp_content_type("application/json")
-        |> send_resp(
-          422,
-          Poison.encode!(%{errors: %{name: "Class with name #{name} already exists"}})
-        )
+    {:error, changeset} ->
+      conn
+      |> put_status(422)
+      |> put_resp_content_type("application/json")
+      |> send_resp(422, Poison.encode!(%{errors: changeset}))
+     end
     end
-  end
 
   def delete_class(conn, %{"id" => id}) do
     class = Repo.get(Class, id)

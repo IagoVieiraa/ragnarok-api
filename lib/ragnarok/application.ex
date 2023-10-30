@@ -8,6 +8,7 @@ defmodule Ragnarok.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      {RagnarokWeb.ClassServer, []},
       RagnarokWeb.Telemetry,
       {Ragnarok.Repo, []},
       {DNSCluster, query: Application.get_env(:ragnarok, :dns_cluster_query) || :ignore},
