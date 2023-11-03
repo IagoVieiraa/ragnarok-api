@@ -8,9 +8,9 @@ defmodule Ragnarok.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      {RagnarokWeb.ClassServer, []},
       RagnarokWeb.Telemetry,
       {Ragnarok.Repo, []},
+      RagnarokWeb.ClassServer,
       {DNSCluster, query: Application.get_env(:ragnarok, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Ragnarok.PubSub},
       # Start the Finch HTTP client for sending emails

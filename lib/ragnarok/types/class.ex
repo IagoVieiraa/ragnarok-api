@@ -16,5 +16,6 @@ defmodule Ragnarok.Class do
     class
     |> cast(attrs, [:name, :description, :stats, :skills])
     |> validate_required([:name, :description, :stats, :skills])
+    |> unique_constraint(:name, message: "Name already exists.")
   end
 end
