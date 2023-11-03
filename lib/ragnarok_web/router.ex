@@ -25,6 +25,8 @@ defmodule RagnarokWeb.Router do
     post "/characters", CharacterController, :create_character
     get "/characters/:id", CharacterController, :get_character
     delete "/characters/:id", CharacterController, :delete_character
+
+    post "/battles", BattleController, :create
   end
 
   # Other scopes may use custom stacks.

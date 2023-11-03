@@ -24,10 +24,16 @@ defmodule RagnarokWeb.CharacterController do
     end
   end
 
-  def create_character(conn, %{"name" => name, "level" => level, "class_id" => class_id}) do
+  def create_character(conn, %{
+        "name" => name,
+        "level" => level,
+        "hp" => hp,
+        "class_id" => class_id
+      }) do
     class = Repo.get(Class, class_id)
 
-    changeset = Character.changeset(%Character{}, %{name: name, level: level, class_id: class_id})
+    changeset =
+      Character.changeset(%Character{}, %{name: name, level: level, class_id: class_id, hp: hp})
 
     case Repo.insert(changeset) do
       {:ok, character} ->
